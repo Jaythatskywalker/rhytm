@@ -1,0 +1,240 @@
+# Beatport Curator – Full Prompt + Technical PRD (WebApp)
+
+## 1. Prompt (Plain English)
+
+Build a web application called **Beatport Curator** where DJs can:
+
+- **Discover tracks** via a table-based interface with filters and AI-powered recommendations  
+- **Curate playlists/collections** from discovered tracks  
+- **Automatically sync** playlists to **Beatport DJ** (primary workflow)  
+- Use **manual export** (CSV, M3U, JSON) as fallback when OAuth2 tokens are absent  
+
+The app must stay **ToS-compliant**:
+- **No scraping** or headless automation  
+- Use **official endpoints** where available  
+- Fall back to **user-provided Beatport URLs/IDs** if APIs are missing  
+
+### Core Features
+
+- **Sticky top navigation** across all screens  
+- **Global mini-player** for preview listening (Play/Pause/Next/Prev/Stop)  
+- **Discover** = Table layout with columns: # · ▶ · Title · Artists · Genre · BPM · Key · Actions  
+- **Filters & sorting** for Genre, BPM, Key  
+- **AI Personalization**:
+  - Learns DJ style from likes/skips, collections, vibe prompts  
+  - Supports **natural-language search** for “vibes” (e.g., *peak-time techno 126–128 BPM like Tale of Us but happier*)  
+  - Explains recommendations (“Because you liked…”)  
+  - Updates continuously with feedback  
+- **Offline-first**: cached Library/Collections, queued sync jobs  
+- **OAuth2 Beatport DJ sync** for playlists  
+- **Fallback exports**: CSV, M3U, JSON for manual workflow  
+- **Responsive UI**: Desktop table, mobile stacked layout  
+
+### Expected Outcomes
+
+- DJs quickly find and collect tracks matching their **style + vibe**  
+- Recommendations improve with **explicit feedback**  
+- Collections sync to Beatport DJ automatically when connected  
+- Offline actions sync later  
+
+---
+
+## 2. Technical PRD (WebApp)
+
+### 2.1 Tech Stack
+
+- **Frontend**: Next.js (App Router) + TypeScript + TailwindCSS  
+- **State**: Zustand or Redux Toolkit  
+- **Backend**: Supabase (Postgres) or Firebase  
+- **Auth**: OAuth2 for Beatport DJ API  
+- **Storage**: IndexedDB for offline cache & sync queue  
+- **AI Layer**:  
+  - Embedding provider (OpenAI/SBERT) for track & vibe vectors  
+  - Vector DB (pgvector/Faiss) + re-ranking pipeline  
+
+---
+
+### 2.2 Screens
+
+1. **Discover**  
+   - Table layout: `# | ▶ | Title | Artists | Genre | BPM | Key | Actions`  
+   - Filters: Genre, BPM min–max, Key  
+   - Sorting: Asc/Desc headers  
+   - Actions: +Library, +Collection, Like/Unlike  
+   - AI strip: “Because you liked…” with explanations  
+   - Natural-language search box  
+
+2. **Library**  
+   - Saved tracks with search, filters, offline mode  
+
+3. **Collections**  
+   - Grid/list, track counts, reorderable, sync status  
+
+4. **Export / Sync**  
+   - **Primary**: Auto-sync to Beatport DJ  
+   - **Fallback**: CSV/M3U/JSON download  
+
+5. **Settings**  
+   - OAuth connection management  
+   - Manual mode toggle  
+   - Profile editor for genres/BPM/vibe notes  
+
+---
+
+### 2.3 Global Components
+
+- **Sticky TopNav** with all tabs  
+- **Global Mini-Player** fixed at bottom  
+- **Toasts** for add/sync/export actions  
+
+---
+
+### 2.4 AI Personalization Flow
+
+1. **Cold Start**: Ask genres, BPM ranges, favorite artists, vibe prompts  
+2. **Profile Embedding**: Combine preferences → vector  
+3. **Track Embedding**: Metadata → vectors  
+4. **Vector Search + Re-Rank**: similarity + filters + recency/novelty  
+5. **Feedback Loop**: likes/skips → preference updates  
+6. **Explainability**: Tooltips for why tracks were suggested  
+
+---
+
+### 2.5 Data Models (TypeScript)
+
+```ts
+type Track = {
+  id: string;
+  beatportId?: number;
+  title: string;
+  artists: string[];
+  genre: string;
+  bpm: number;
+  key: string;
+  liked: boolean;
+  previewUrl?: string;
+  features?: { embed?: number[] };
+};
+
+type Collection = {
+  id: string;
+  name: string;
+  updatedAt: string;
+  beatportPlaylistId?: string;
+};
+
+type AuthConfig = {
+  provider: 'beatport';
+  accessToken?: string;
+  refreshToken?: string;
+  expiresAt?: string;
+  manualMode: boolean;
+};
+
+type DjProfile = {
+  userId: string;
+  seedGenres: string[];
+  bpmRange: [number, number];
+  preferredKeys: string[];
+  vibeNotes?: string;
+  preferenceVector?: number[];
+  weights: {
+    genreMatch: number;
+    bpmMatch: number;
+    keyMatch: number;
+    recency: number;
+    novelty: number;
+  };
+};
+## 2.6 API Endpoints
+
+POST /api/auth/beatport/oauth/start       # Start Beatport OAuth2 flow
+GET  /api/auth/beatport/oauth/callback    # Handle OAuth2 callback
+
+GET  /api/tracks/search                   # Search tracks with filters + NL queries
+GET  /api/recommendations                 # AI-powered track recommendations
+POST /api/collections                     # Create new collection
+PATCH /api/collections/:id                # Update collection (rename, reorder, tags)
+POST /api/collections/:id/tracks          # Add tracks to a collection
+
+POST /api/sync/beatport                    # Auto-sync collections to Beatport DJ
+GET  /api/sync/status                      # Check sync status
+
+GET  /api/export/:id.csv                   # Export collection to CSV
+GET  /api/export/:id.m3u                   # Export collection to M3U
+GET  /api/export/:id.json                  # Export collection to JSON
+
+POST /api/feedback                         # User feedback events (like/skip/play)
+POST /api/profile/seed                     # Initial DJ profile preferences
+GET  /api/profile                          # Fetch current DJ profile
+PATCH /api/profile                         # Update profile weights, notes
+
+
+---
+
+## 2.7 Offline Mode
+
+- **IndexedDB Caching**  
+  - Store Library, Collections, Profile locally for offline access  
+  - Cache recent searches and recommendations  
+
+- **Queued Actions**  
+  - Add-to-Library, Add-to-Collection, Like/Skip events queue locally if offline  
+  - On reconnect → sync queue to backend + Beatport  
+
+- **Service Workers**  
+  - Cache static assets (JS, CSS, images)  
+  - Background sync jobs when connection returns  
+
+- **Conflict Resolution**  
+  - Last-write-wins for track actions  
+  - Collection edits resolved via timestamps  
+
+---
+
+## 2.8 Testing Strategy
+
+- **Unit Tests**  
+  - Table filters, sorting, mini-player controls  
+  - Export formatters (CSV, M3U, JSON) correctness  
+
+- **Integration Tests**  
+  - Discover → Like → Recommendations update  
+  - Offline add → Online sync flow  
+  - OAuth2 login → Auto-sync trigger  
+
+- **E2E (Playwright/Cypress)**  
+  - Full flow: Discover → Collection → Sync → Export  
+  - Offline-first: Queue actions, reconnect, verify sync  
+
+- **AI Tests**  
+  - Verify NL queries map to correct filters  
+  - Recommendations improve with likes/skips  
+
+---
+
+## 2.9 Milestones
+
+1. **MVP**  
+   - UI scaffolding (Next.js + Tailwind)  
+   - Sticky top nav, mini-player  
+   - OAuth2 Beatport integration  
+   - Manual export (CSV/M3U/JSON)  
+
+2. **AI v1**  
+   - Profile onboarding  
+   - Embedding-based search + re-ranking  
+   - Feedback loop (likes/skips adapt recs)  
+
+3. **Auto-Sync v1**  
+   - Full Beatport DJ sync flow  
+   - Sync status UI + retries on failure  
+
+4. **Offline-First**  
+   - IndexedDB caching  
+   - Sync queue for offline actions  
+
+5. **Polish & Metrics**  
+   - Explanations for recommendations  
+   - Waveform previews  
+   - Analytics dashboards & performance tuning  
