@@ -43,89 +43,89 @@ export default function SettingsPage() {
               <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Beatport Connection</h2>
             </div>
           
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-md">
-              <div>
-                <p className="text-red-800 font-medium">Not Connected</p>
-                <p className="text-red-600 text-sm">Connect your Beatport account to enable automatic sync</p>
+            <div className="space-y-4">
+              <div className={`flex items-center justify-between p-4 rounded-lg border ${theme === 'dark' ? 'bg-red-500/10 border-red-400/30' : 'bg-red-50 border-red-200'}`}>
+                <div>
+                  <p className={`font-medium ${theme === 'dark' ? 'text-red-300' : 'text-red-800'}`}>Not Connected</p>
+                  <p className={`text-sm ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>Connect your Beatport account to enable automatic sync</p>
+                </div>
+                <button className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${theme === 'dark' ? 'bg-blue-500/20 hover:bg-blue-500/30 border-blue-400/40 text-blue-200 border' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}>
+                  Connect
+                </button>
               </div>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                Connect
-              </button>
-            </div>
             
-            <div className="flex items-center justify-between">
-              <div>
-                <label className="text-sm font-medium text-gray-700">Manual Mode</label>
-                <p className="text-sm text-gray-500">
-                  Operate only on user-provided URLs/IDs (ToS compliant)
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-700'}`}>Manual Mode</label>
+                  <p className={`text-sm ${theme === 'dark' ? 'text-white/60' : 'text-gray-500'}`}>
+                    Operate only on user-provided URLs/IDs (ToS compliant)
+                  </p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={manualMode}
+                    onChange={(e) => setManualMode(e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className={`w-11 h-6 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${theme === 'dark' ? 'bg-gray-600 peer-focus:ring-blue-400 after:border-gray-500 peer-checked:bg-blue-500' : 'bg-gray-200 peer-focus:ring-blue-300 after:border-gray-300 peer-checked:bg-blue-600'} peer-focus:outline-none peer-focus:ring-4`}></div>
+                </label>
+              </div>
+          </div>
+        </div>
+
+          {/* DJ Profile */}
+          <div className={`${cardClass} rounded-2xl p-6 border transition hover:shadow-md`}>
+            <div className="flex items-center space-x-3 mb-4">
+              <User className={theme === 'dark' ? 'text-green-400' : 'text-green-600'} size={24} />
+              <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>DJ Profile</h2>
+            </div>
+          
+            <div className="space-y-4">
+              <div className={`p-4 rounded-lg border ${theme === 'dark' ? 'bg-blue-500/10 border-blue-400/30' : 'bg-blue-50 border-blue-200'}`}>
+                <p className={`font-medium ${theme === 'dark' ? 'text-blue-300' : 'text-blue-800'}`}>AI Personalization Active</p>
+                <p className={`text-sm ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Your profile learns from your listening habits and preferences</p>
+              </div>
+            
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button className={`flex items-center justify-center space-x-2 p-3 border rounded-lg transition-colors ${theme === 'dark' ? 'border-white/20 hover:bg-white/10 text-white' : 'border-gray-300 hover:bg-gray-50 text-gray-700'}`}>
+                  <span>Edit Preferences</span>
+                  <ExternalLink size={16} />
+                </button>
+                
+                <button className={`flex items-center justify-center space-x-2 p-3 border rounded-lg transition-colors ${theme === 'dark' ? 'border-white/20 hover:bg-white/10 text-white' : 'border-gray-300 hover:bg-gray-50 text-gray-700'}`}>
+                  <span>View Learning Data</span>
+                  <ExternalLink size={16} />
+                </button>
+              </div>
+            
+              <div className={`pt-4 border-t ${theme === 'dark' ? 'border-white/10' : 'border-gray-200'}`}>
+                <button
+                  onClick={() => setShowResetConfirm(true)}
+                  className={`flex items-center space-x-2 transition-colors ${theme === 'dark' ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-800'}`}
+                >
+                  <Trash2 size={16} />
+                  <span>Reset DJ Profile</span>
+                </button>
+                <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-white/50' : 'text-gray-500'}`}>
+                  This will clear all learned preferences and start fresh
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={manualMode}
-                  onChange={(e) => setManualMode(e.target.checked)}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
           </div>
         </div>
 
-        {/* DJ Profile */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <User className="text-green-600" size={24} />
-            <h2 className="text-xl font-semibold text-gray-900">DJ Profile</h2>
-          </div>
+          {/* Data & Privacy */}
+          <div className={`${cardClass} rounded-2xl p-6 border transition hover:shadow-md`}>
+            <div className="flex items-center space-x-3 mb-4">
+              <Shield className={theme === 'dark' ? 'text-purple-400' : 'text-purple-600'} size={24} />
+              <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Data & Privacy</h2>
+            </div>
           
-          <div className="space-y-4">
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-md">
-              <p className="text-blue-800 font-medium">AI Personalization Active</p>
-              <p className="text-blue-600 text-sm">Your profile learns from your listening habits and preferences</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <button className="flex items-center justify-center space-x-2 p-3 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
-                <span>Edit Preferences</span>
-                <ExternalLink size={16} />
-              </button>
-              
-              <button className="flex items-center justify-center space-x-2 p-3 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
-                <span>View Learning Data</span>
-                <ExternalLink size={16} />
-              </button>
-            </div>
-            
-            <div className="pt-4 border-t border-gray-200">
-              <button
-                onClick={() => setShowResetConfirm(true)}
-                className="flex items-center space-x-2 text-red-600 hover:text-red-800 transition-colors"
-              >
-                <Trash2 size={16} />
-                <span>Reset DJ Profile</span>
-              </button>
-              <p className="text-sm text-gray-500 mt-1">
-                This will clear all learned preferences and start fresh
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Data & Privacy */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <Shield className="text-purple-600" size={24} />
-            <h2 className="text-xl font-semibold text-gray-900">Data & Privacy</h2>
-          </div>
-          
-          <div className="space-y-4">
-            <div className="p-4 bg-green-50 border border-green-200 rounded-md">
-              <p className="text-green-800 font-medium">Privacy Protected</p>
-              <p className="text-green-600 text-sm">Your profile data is stored locally and never shared</p>
-            </div>
+            <div className="space-y-4">
+              <div className={`p-4 rounded-lg border ${theme === 'dark' ? 'bg-green-500/10 border-green-400/30' : 'bg-green-50 border-green-200'}`}>
+                <p className={`font-medium ${theme === 'dark' ? 'text-green-300' : 'text-green-800'}`}>Privacy Protected</p>
+                <p className={`text-sm ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>Your profile data is stored locally and never shared</p>
+              </div>
             
             <div className="space-y-3">
               <button

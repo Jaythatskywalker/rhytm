@@ -57,7 +57,7 @@ export function DashboardPage({ children, theme = 'dark', onThemeChange }: Dashb
 
   return (
     <DashboardLayout>
-      <div className={`h-full ${bgClass} ${textClass} relative flex flex-col`}>
+      <div className={`min-h-full ${bgClass} ${textClass} relative flex flex-col`}>
         <DashboardBackdrop theme={currentTheme} />
         
         {/* Header */}
