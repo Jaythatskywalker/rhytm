@@ -12,10 +12,10 @@ interface ExportParams {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: ExportParams }
+  { params }: { params: Promise<ExportParams> }
 ) {
   try {
-    const { id, format } = params;
+    const { id, format } = await params;
     
     // Find the collection
     const collection = mockCollections.find(c => c.id === id);
