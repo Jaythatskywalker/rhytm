@@ -328,21 +328,21 @@ function TrackAnalytics({ tracks, theme }: TrackAnalyticsProps) {
   const keyAnalysis = BeatportURLService.analyzeKeyCompatibility(tracks);
   const bpmAnalysis = BeatportURLService.analyzeBPMCompatibility(tracks);
 
-  // Camelot Wheel positions for visualization
-  // const camelotPositions = { // Unused
-    '1A': { x: 50, y: 5, color: '#ef4444' },   '1B': { x: 65, y: 10, color: '#f97316' },
-    '2A': { x: 75, y: 20, color: '#f59e0b' },  '2B': { x: 80, y: 35, color: '#eab308' },
-    '3A': { x: 80, y: 50, color: '#84cc16' },  '3B': { x: 75, y: 65, color: '#22c55e' },
-    '4A': { x: 65, y: 75, color: '#10b981' },  '4B': { x: 50, y: 80, color: '#14b8a6' },
-    '5A': { x: 35, y: 75, color: '#06b6d4' },  '5B': { x: 25, y: 65, color: '#0ea5e9' },
-    '6A': { x: 20, y: 50, color: '#3b82f6' },  '6B': { x: 25, y: 35, color: '#6366f1' },
-    '7A': { x: 35, y: 25, color: '#8b5cf6' },  '7B': { x: 50, y: 20, color: '#a855f7' },
-    '8A': { x: 65, y: 25, color: '#c084fc' },  '8B': { x: 75, y: 35, color: '#d946ef' },
-    '9A': { x: 75, y: 50, color: '#ec4899' },  '9B': { x: 65, y: 65, color: '#f43f5e' },
-    '10A': { x: 50, y: 70, color: '#ef4444' }, '10B': { x: 35, y: 65, color: '#f97316' },
-    '11A': { x: 25, y: 50, color: '#f59e0b' }, '11B': { x: 35, y: 35, color: '#eab308' },
-    '12A': { x: 50, y: 30, color: '#84cc16' }, '12B': { x: 65, y: 35, color: '#22c55e' }
-  };
+  // Camelot Wheel positions for visualization (commented out - unused)
+  // const camelotPositions = {
+  //   '1A': { x: 50, y: 5, color: '#ef4444' },   '1B': { x: 65, y: 10, color: '#f97316' },
+  //   '2A': { x: 75, y: 20, color: '#f59e0b' },  '2B': { x: 80, y: 35, color: '#eab308' },
+  //   '3A': { x: 80, y: 50, color: '#84cc16' },  '3B': { x: 75, y: 65, color: '#22c55e' },
+  //   '4A': { x: 65, y: 75, color: '#10b981' },  '4B': { x: 50, y: 80, color: '#14b8a6' },
+  //   '5A': { x: 35, y: 75, color: '#06b6d4' },  '5B': { x: 25, y: 65, color: '#0ea5e9' },
+  //   '6A': { x: 20, y: 50, color: '#3b82f6' },  '6B': { x: 25, y: 35, color: '#6366f1' },
+  //   '7A': { x: 35, y: 25, color: '#8b5cf6' },  '7B': { x: 50, y: 20, color: '#a855f7' },
+  //   '8A': { x: 65, y: 25, color: '#c084fc' },  '8B': { x: 75, y: 35, color: '#d946ef' },
+  //   '9A': { x: 75, y: 50, color: '#ec4899' },  '9B': { x: 65, y: 65, color: '#f43f5e' },
+  //   '10A': { x: 50, y: 70, color: '#ef4444' }, '10B': { x: 35, y: 65, color: '#f97316' },
+  //   '11A': { x: 25, y: 50, color: '#f59e0b' }, '11B': { x: 35, y: 35, color: '#eab308' },
+  //   '12A': { x: 50, y: 30, color: '#84cc16' }, '12B': { x: 65, y: 35, color: '#22c55e' }
+  // };
 
   // Get unique keys from tracks
   const trackKeys = tracks.map(t => t.key);
