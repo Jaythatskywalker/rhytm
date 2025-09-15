@@ -344,8 +344,8 @@ function TrackAnalytics({ tracks, theme }: TrackAnalyticsProps) {
   //   '12A': { x: 50, y: 30, color: '#84cc16' }, '12B': { x: 65, y: 35, color: '#22c55e' }
   // };
 
-  // Get unique keys from tracks
-  const trackKeys = tracks.map(t => t.key);
+  // Get unique keys from tracks (commented out - unused)
+  // const trackKeys = tracks.map(t => t.key);
   // const uniqueKeys = [...new Set(trackKeys)]; // Unused
 
   // BPM distribution

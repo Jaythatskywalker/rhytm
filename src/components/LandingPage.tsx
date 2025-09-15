@@ -10,7 +10,7 @@ export default function LandingPage(){
   
   // New state for enhanced effects
   const [scrollY, setScrollY] = React.useState(0)
-  const [isGlitching, setIsGlitching] = React.useState(false)
+  // const [isGlitching, setIsGlitching] = React.useState(false) // Unused
   const [crackles, setCrackles] = React.useState<Array<{id: number, x: number, y: number}>>([])
   const [mousePos, setMousePos] = React.useState({x: 0, y: 0})
 
@@ -164,7 +164,7 @@ export default function LandingPage(){
                 Stop wasting time. <span className="whitespace-nowrap">Find the perfect tracks.</span>
               </h1>
               <p className={(theme==='dark'? 'text-white/70':'text-[#1a1a17]/70')+" mt-3 md:text-base"}>
-                AI-powered curation for aspiring and veteran DJs. Tell us your vibe, and we'll surface tracks that fit your style — fast.
+                AI-powered curation for aspiring and veteran DJs. Tell us your vibe, and we&apos;ll surface tracks that fit your style — fast.
               </p>
               <div className="mt-5 flex flex-col sm:flex-row gap-3">
                 <a href="#waitlist" className={(theme==='dark'?'bg-emerald-500 text-black':'bg-emerald-600 text-white')+" px-5 py-3 rounded-xl text-sm font-semibold transition-transform hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98]"}>Join the waiting list</a>
@@ -226,7 +226,7 @@ export default function LandingPage(){
           <div>
             <h2 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-teal-400 bg-clip-text text-transparent">Too many tracks. Too little time.</h2>
             <p className={(theme==='dark'? 'text-white/70':'text-[#1a1a17]/70')+" mt-3"}>
-              Sifting through endless lists wastes creative energy. Most tracks aren't right for your style — or your next set.
+              Sifting through endless lists wastes creative energy. Most tracks aren&apos;t right for your style — or your next set.
             </p>
             <ul className={(theme==='dark'? 'text-white/80':'text-[#1a1a17]/80')+" mt-6 grid gap-3 text-sm"}>
               <li className="flex items-start gap-2 hover:translate-x-0.5 transition"><span className="mt-1">⏱</span><span>Hours lost scrolling and sampling.</span></li>
@@ -286,7 +286,7 @@ export default function LandingPage(){
               Trusted by DJs Worldwide
             </h2>
             <p className={(theme==='dark'? 'text-white/70':'text-[#1a1a17]/70')}>
-              Join thousands of DJs who've transformed their music discovery
+              Join thousands of DJs who&apos;ve transformed their music discovery
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -330,7 +330,7 @@ export default function LandingPage(){
             <button type="submit" className={(theme==='dark'?'bg-emerald-500 text-black':'bg-emerald-600 text-white')+" px-5 py-3 rounded-xl text-sm font-semibold transition-transform hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98]"}>Notify me</button>
           </form>
           {error && <p className="mt-2 text-sm text-rose-400">{error}</p>}
-          {submitted && <div className={(theme==='dark'?'bg-emerald-500/15 text-emerald-200 border-emerald-400/30':'bg-emerald-600/10 text-emerald-800 border-emerald-600/30')+" mt-4 inline-flex items-center gap-2 px-3 py-2 rounded-lg border text-sm"}>✅ Thanks! We'll be in touch soon.</div>}
+          {submitted && <div className={(theme==='dark'?'bg-emerald-500/15 text-emerald-200 border-emerald-400/30':'bg-emerald-600/10 text-emerald-800 border-emerald-600/30')+" mt-4 inline-flex items-center gap-2 px-3 py-2 rounded-lg border text-sm"}>✅ Thanks! We&apos;ll be in touch soon.</div>}
         </div>
       </section>
 
@@ -375,21 +375,21 @@ function HeaderBackdrop({theme}:{theme:'dark'|'light'}){
   )
 }
 
-function ClubBackdrop({theme, offset}:{theme:'dark'|'light'; offset:{x:number,y:number}}){
-  const t1 = { transform: `translate3d(${offset.x*30}px, ${offset.y*30}px, 0)` }
-  const t2 = { transform: `translate3d(${offset.x*-20}px, ${offset.y*-20}px, 0)` }
-  return (
-    <div aria-hidden className="absolute inset-0 overflow-hidden">
-      {/* gradient wash (stronger in light theme) */}
-      <div style={t1} className={"absolute -inset-[20%] blur-3xl "+(theme==='dark'
-        ? 'opacity-60 bg-[radial-gradient(circle_at_20%_10%,rgba(157,78,221,0.35),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(16,185,129,0.35),transparent_35%),radial-gradient(circle_at_60%_80%,rgba(56,189,248,0.25),transparent_35%)]'
-        : 'opacity-80 bg-[radial-gradient(circle_at_20%_10%,rgba(255,196,124,0.55),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(255,137,137,0.5),transparent_35%),radial-gradient(circle_at_60%_80%,rgba(176,220,255,0.45),transparent_35%)]')}></div>
-      {/* subtle grid with parallax */}
-      <div style={t2} className={(theme==='dark'
-        ? 'bg-[linear-gradient(transparent_95%,rgba(255,255,255,0.08)_95%),linear-gradient(90deg,transparent_95%,rgba(255,255,255,0.08)_95%)]'
-        : 'bg-[linear-gradient(transparent_95%,rgba(26,26,23,0.07)_95%),linear-gradient(90deg,transparent_95%,rgba(26,26,23,0.07)_95%)]')+" absolute inset-0 bg-[size:20px_20px] opacity-40"}></div>
-    </div>
-  )
+// function ClubBackdrop({theme, offset}:{theme:'dark'|'light'; offset:{x:number,y:number}}){ // Unused
+  // const t1 = { transform: `translate3d(${offset.x*30}px, ${offset.y*30}px, 0)` }
+  // const t2 = { transform: `translate3d(${offset.x*-20}px, ${offset.y*-20}px, 0)` }
+  // return (
+  //   <div aria-hidden className="absolute inset-0 overflow-hidden">
+  //     {/* gradient wash (stronger in light theme) */}
+  //     <div style={t1} className={"absolute -inset-[20%] blur-3xl "+(theme==='dark'
+  //       ? 'opacity-60 bg-[radial-gradient(circle_at_20%_10%,rgba(157,78,221,0.35),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(16,185,129,0.35),transparent_35%),radial-gradient(circle_at_60%_80%,rgba(56,189,248,0.25),transparent_35%)]'
+  //       : 'opacity-80 bg-[radial-gradient(circle_at_20%_10%,rgba(255,196,124,0.55),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(255,137,137,0.5),transparent_35%),radial-gradient(circle_at_60%_80%,rgba(176,220,255,0.45),transparent_35%)]')}></div>
+  //     {/* subtle grid with parallax */}
+  //     <div style={t2} className={(theme==='dark'
+  //       ? 'bg-[linear-gradient(transparent_95%,rgba(255,255,255,0.08)_95%),linear-gradient(90deg,transparent_95%,rgba(255,255,255,0.08)_95%)]'
+  //       : 'bg-[linear-gradient(transparent_95%,rgba(26,26,23,0.07)_95%),linear-gradient(90deg,transparent_95%,rgba(26,26,23,0.07)_95%)]')+" absolute inset-0 bg-[size:20px_20px] opacity-40"}></div>
+  //   </div>
+  // )
 }
 
 function SectionBackdrop({theme, subtle}:{theme:'dark'|'light'; subtle?:boolean}){
@@ -446,7 +446,7 @@ function Quote({theme, who, text, image}:{theme:'dark'|'light'; who:string; text
             />
           </div>
         </div>
-        <blockquote className={(theme==='dark'? 'text-white':'text-[#1a1a17]')+" text-sm mb-3"}>"{text}"</blockquote>
+        <blockquote className={(theme==='dark'? 'text-white':'text-[#1a1a17]')+" text-sm mb-3"}>&quot;{text}&quot;</blockquote>
         <figcaption className={(theme==='dark'?'text-white/70':'text-[#1a1a17]/70')+" text-xs font-medium"}>— {who}</figcaption>
       </div>
     </figure>
