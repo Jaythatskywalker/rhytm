@@ -254,8 +254,11 @@ export class BeatportURLService {
     const seed = beatportId % 1000;
     const random = (index: number, max: number) => ((seed + index) * 9301 + 49297) % max;
     
+    // Generate unique ID to prevent React key conflicts
+    const uniqueId = `beatport-${beatportId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
     return {
-      id: `beatport-${beatportId}`,
+      id: uniqueId,
       beatportId,
       title: titles[random(1, titles.length)],
       artists: artists[random(2, artists.length)],

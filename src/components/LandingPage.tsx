@@ -55,12 +55,12 @@ export default function LandingPage(){
       {/* Theme toggle + nav (sticky) */}
       <header className={(theme==='dark'?'bg-white/5 text-white':'bg-[#1a1a17]/5 text-[#1a1a17]')+ ' sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-opacity-60 relative'}>
         <HeaderBackdrop theme={theme} />
-        <div className="mx-auto max-w-6xl px-4 py-2 flex items-center justify-between relative z-10">
+        <div className="mx-auto max-w-6xl px-4 py-0.5 flex items-center justify-between relative z-10">
           <div className="flex items-center gap-2">
             <img 
               src={theme === 'dark' ? '/rhytm-logo-dark.png' : '/rhytm-logo-light.png'}
               alt="RHYTM Logo"
-              className="h-18 w-auto"
+              className="h-28 w-auto"
             />
           </div>
           <nav className="hidden md:flex items-center gap-6 text-base font-bold opacity-90">

@@ -46,13 +46,6 @@ export default function Page() {
 
   return (
     <DashboardPage theme={theme} onThemeChange={setTheme}>
-      {/* Toggle Button - Fixed position over dashboard */}
-      <button
-        onClick={handleBackToLanding}
-        className="fixed top-4 right-4 z-[60] bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-lg"
-      >
-        ← Back to Landing
-      </button>
       <DiscoverDashboard theme={theme} />
     </DashboardPage>
   );
