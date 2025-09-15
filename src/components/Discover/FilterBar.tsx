@@ -60,7 +60,7 @@ export function FilterBar({ theme = 'dark' }: { theme?: 'dark' | 'light' }) {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     const lowerQuery = query.toLowerCase();
-    let appliedFilters: Record<string, string | number | undefined> = {};
+    const appliedFilters: Record<string, string | number | undefined> = {};
     let responseText = '';
     let suggestions: string[] = [];
 

@@ -140,7 +140,7 @@ export default function LandingPage(){
         onTouchStart={onHeroClick}
       >
         {/* Enhanced backdrop with wavy gradients */}
-        <EnhancedClubBackdrop theme={theme} offset={offset} mousePos={mousePos} isGlitching={isGlitching} />
+        <EnhancedClubBackdrop theme={theme} offset={offset} mousePos={mousePos} />
         
         {/* Crackle effects */}
         {crackles.map(crackle => (
@@ -454,11 +454,10 @@ function Quote({theme, who, text, image}:{theme:'dark'|'light'; who:string; text
 }
 
 // Enhanced backdrop component with wavy gradients
-function EnhancedClubBackdrop({theme, offset, mousePos, isGlitching}: {
+function EnhancedClubBackdrop({theme, offset, mousePos}: {
   theme: 'dark'|'light'; 
   offset: {x:number,y:number}; 
   mousePos: {x:number,y:number};
-  isGlitching: boolean;
 }) {
   const t1 = { 
     transform: `translate3d(${offset.x*40}px, ${offset.y*40}px, 0) scale(1)` 
