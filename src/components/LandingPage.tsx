@@ -390,7 +390,7 @@ function HeaderBackdrop({theme}:{theme:'dark'|'light'}){
   //       : 'bg-[linear-gradient(transparent_95%,rgba(26,26,23,0.07)_95%),linear-gradient(90deg,transparent_95%,rgba(26,26,23,0.07)_95%)]')+" absolute inset-0 bg-[size:20px_20px] opacity-40"}></div>
   //   </div>
   // )
-}
+// }
 
 function SectionBackdrop({theme, subtle}:{theme:'dark'|'light'; subtle?:boolean}){
   return (
