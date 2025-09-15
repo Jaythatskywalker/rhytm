@@ -40,7 +40,7 @@ export async function exportCollection(
   }
 }
 
-export function generateLocalCSV(tracks: Track[], collectionName: string): string {
+export function generateLocalCSV(tracks: Track[], _collectionName: string): string {
   const headers = [
     'Title',
     'Artists', 

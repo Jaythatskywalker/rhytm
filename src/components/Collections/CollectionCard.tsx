@@ -163,7 +163,7 @@ export function CollectionCard({ collection }: CollectionCardProps) {
               Delete Collection
             </h3>
             <p className="text-gray-600 mb-4">
-              Are you sure you want to delete "{collection.name}"? This action cannot be undone.
+              Are you sure you want to delete &quot;{collection.name}&quot;? This action cannot be undone.
             </p>
             <div className="flex space-x-3">
               <button

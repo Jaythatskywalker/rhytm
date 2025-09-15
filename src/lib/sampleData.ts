@@ -130,7 +130,7 @@ export const sampleTracks: Track[] = [
 ];
 
 // Filter and sort functions
-export function filterTracks(tracks: Track[], filters: any): Track[] {
+export function filterTracks(tracks: Track[], filters: Record<string, string | number | undefined>): Track[] {
   return tracks.filter(track => {
     if (filters.genre && track.genre !== filters.genre) return false;
     if (filters.key && track.key !== filters.key) return false;
@@ -145,10 +145,10 @@ export function filterTracks(tracks: Track[], filters: any): Track[] {
   });
 }
 
-export function sortTracks(tracks: Track[], sort: any): Track[] {
+export function sortTracks(tracks: Track[], sort: { field: keyof Track; direction: 'asc' | 'desc' }): Track[] {
   return [...tracks].sort((a, b) => {
-    let aValue: any = a[sort.field as keyof Track];
-    let bValue: any = b[sort.field as keyof Track];
+    let aValue: string | number = a[sort.field] as string | number;
+    let bValue: string | number = b[sort.field] as string | number;
     
     // Handle arrays (like artists)
     if (Array.isArray(aValue)) aValue = aValue.join(', ');
@@ -396,7 +396,7 @@ export const processAIQueryWithBeatport = async (
 ): Promise<{
   text: string;
   tracks?: Track[];
-  appliedFilters?: any;
+  appliedFilters?: Record<string, string | number | undefined>;
   suggestions?: string[];
 }> => {
   // Check if user provided Beatport URLs
@@ -432,7 +432,7 @@ export const processAIQueryWithBeatport = async (
           'Show energy progression'
         ]
       };
-    } catch (error) {
+    } catch {
       return {
         text: 'I found Beatport URLs but encountered an error fetching the track data. Please check the URLs and try again.',
         suggestions: ['Check URL format', 'Try one URL at a time', 'Contact support']

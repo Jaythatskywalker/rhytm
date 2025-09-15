@@ -14,7 +14,7 @@ interface SyncQueueItem {
   id: string;
   type: 'track' | 'collection' | 'feedback';
   action: 'create' | 'update' | 'delete';
-  data: any;
+  data: Track | Collection | { trackId: string; action: 'like' | 'skip' };
   timestamp: number;
 }
 

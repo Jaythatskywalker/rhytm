@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { Search, X, Sparkles, Send, Bot, Mic, MicOff } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { X, Sparkles, Send, Bot } from 'lucide-react';
 import { useFiltersStore } from '@/lib/stores/useFiltersStore';
 import { GENRES, KEYS, MOODS, ENERGY_LEVELS, VOCAL_AMOUNTS, Track } from '@/types';
 import { BeatportURLService, processAIQueryWithBeatport } from '@/lib/sampleData';
 
 interface AIResponse {
   text: string;
-  appliedFilters?: any;
+  appliedFilters?: Record<string, string | number | undefined>;
   suggestions?: string[];
 }
 
@@ -49,7 +49,7 @@ export function FilterBar({ theme = 'dark' }: { theme?: 'dark' | 'light' }) {
       try {
         const result = await processAIQueryWithBeatport(query, onTrackResults);
         return { text: result.text, appliedFilters: result.appliedFilters, suggestions: result.suggestions };
-      } catch (error) {
+      } catch {
         return { text: 'Error processing Beatport URLs.', suggestions: ['Check URL format'] };
       } finally {
         setIsProcessing(false);
@@ -60,7 +60,7 @@ export function FilterBar({ theme = 'dark' }: { theme?: 'dark' | 'light' }) {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     const lowerQuery = query.toLowerCase();
-    let appliedFilters: any = {};
+    let appliedFilters: Record<string, string | number | undefined> = {};
     let responseText = '';
     let suggestions: string[] = [];
 
@@ -244,7 +244,7 @@ export function FilterBar({ theme = 'dark' }: { theme?: 'dark' | 'light' }) {
           )}
           
           <p className={`text-xs mt-2 ${theme === 'dark' ? 'text-white/60' : 'text-[#1a1a17]/60'}`}>
-            💡 Try: "Find groovy house tracks" • "128 BPM minimal techno" • "Dark progressive for peak time"
+            💡 Try: &quot;Find groovy house tracks&quot; • &quot;128 BPM minimal techno&quot; • &quot;Dark progressive for peak time&quot;
           </p>
         </div>
 

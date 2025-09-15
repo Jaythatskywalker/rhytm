@@ -24,10 +24,7 @@ export default function Page() {
     localStorage.setItem('rhytm-view-mode', 'dashboard');
   };
 
-  const handleBackToLanding = () => {
-    setShowLanding(true);
-    localStorage.setItem('rhytm-view-mode', 'landing');
-  };
+  // Removed handleBackToLanding - no longer needed
 
   if (showLanding) {
     return (

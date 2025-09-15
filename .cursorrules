@@ -1,0 +1,39 @@
+# RHYTM Project - Important Configuration Rules
+
+## 🚨 CRITICAL: Environment Variables Configuration
+
+### NEVER modify next.config.ts without preserving these environment variables:
+
+```typescript
+env: {
+  // Supabase Configuration
+  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  
+  // Beatport OAuth2 Configuration
+  BEATPORT_CLIENT_ID: process.env.BEATPORT_CLIENT_ID,
+  BEATPORT_CLIENT_SECRET: process.env.BEATPORT_CLIENT_SECRET,
+  BEATPORT_REDIRECT_URI: process.env.BEATPORT_REDIRECT_URI,
+}
+```
+
+### Vercel Environment Variables Required:
+- `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anonymous key
+- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key
+- `BEATPORT_CLIENT_ID` - Beatport OAuth client ID
+- `BEATPORT_CLIENT_SECRET` - Beatport OAuth client secret
+- `BEATPORT_REDIRECT_URI` - Beatport OAuth redirect URI
+
+### ⚠️ WARNING: 
+- The project has extensive Supabase and Beatport integration
+- Removing these env vars will break the application
+- Always preserve the complete env configuration in next.config.ts
+- The CUSTOM_KEY was a mistake - do not add it back
+
+## Project Structure:
+- Landing page with hero section and scroll effects
+- Dashboard with Beatport integration
+- Supabase for database and auth
+- Beatport OAuth2 for DJ sync functionality

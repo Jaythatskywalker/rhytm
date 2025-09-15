@@ -31,7 +31,7 @@ export default function CollectionDetailPage() {
             Collection not found
           </h2>
           <p className="text-gray-600 mb-4">
-            The collection you're looking for doesn't exist.
+            The collection you&apos;re looking for doesn&apos;t exist.
           </p>
           <button
             onClick={() => router.push('/collections')}

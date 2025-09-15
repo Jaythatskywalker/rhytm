@@ -1,39 +1,52 @@
 import React from 'react'
 
-// Landing page with Dark/Light toggle, parallax hero, micro-animations,
-// enhanced light theme (beige), and unified grid/gradient backdrops.
-// TailwindCSS utilities assumed available in preview context.
-
+// Landing page with enhanced interactive hero section
 export default function LandingPage(){
   const [theme, setTheme] = React.useState<'dark'|'light'>('dark')
   const [email, setEmail] = React.useState('')
   const [submitted, setSubmitted] = React.useState(false)
   const [error, setError] = React.useState<string|null>(null)
   const [offset, setOffset] = React.useState({x:0, y:0}) // parallax offset (-0.5..0.5)
+  
+  // New state for enhanced effects
+  const [scrollY, setScrollY] = React.useState(0)
+  const [isGlitching, setIsGlitching] = React.useState(false)
+  const [crackles, setCrackles] = React.useState<Array<{id: number, x: number, y: number}>>([])
+  const [mousePos, setMousePos] = React.useState({x: 0, y: 0})
 
-  // ---- Lightweight self-tests (dev only) -----------------------------------
+  // Scroll effect
   React.useEffect(() => {
-    try {
-      const results: {name:string; pass:boolean}[] = []
-      const assert = (name:string, cond:boolean) => results.push({name, pass: !!cond})
-      // 1) Component existence
-      assert('HeaderBackdrop is defined', typeof HeaderBackdrop === 'function')
-      assert('SectionBackdrop is defined', typeof SectionBackdrop === 'function')
-      assert('ClubBackdrop is defined', typeof ClubBackdrop === 'function')
-      // 2) Email regex sanity
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      const valid = ['a@b.co','dj.name+test@club.io']
-      const invalid = ['a@b','noatsign.com','x@y','']
-      assert('valid emails pass', valid.every(e => re.test(e)))
-      assert('invalid emails fail', invalid.every(e => !re.test(e)))
-      // 3) Theme toggle value domain
-      assert("theme in {'dark','light'}", theme === 'dark' || theme === 'light')
-      // Print table if available (ignored in prod)
-      // eslint-disable-next-line no-console
-      if (typeof console !== 'undefined' && typeof console.table === 'function') console.table(results)
-    } catch { /* ignore in production preview */ }
-  }, [theme])
-  // -------------------------------------------------------------------------
+    const handleScroll = () => setScrollY(window.scrollY)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Enhanced hero mouse move for parallax and gradients
+  function onHeroMove(e: React.MouseEvent){
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    setOffset({x, y})
+    setMousePos({x: e.clientX - rect.left, y: e.clientY - rect.top})
+  }
+
+  // Crackle effect on click/touch
+  function onHeroClick(e: React.MouseEvent | React.TouchEvent) {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+    const x = clientX - rect.left
+    const y = clientY - rect.top
+    
+    // Add crackle effect
+    const newCrackle = { id: Date.now(), x, y }
+    setCrackles(prev => [...prev, newCrackle])
+    
+    // Remove crackle after animation
+    setTimeout(() => {
+      setCrackles(prev => prev.filter(c => c.id !== newCrackle.id))
+    }, 800)
+  }
 
   function submit(e: React.FormEvent){
     e.preventDefault()
@@ -43,16 +56,59 @@ export default function LandingPage(){
     setSubmitted(true)
   }
 
-  function onHeroMove(e: React.MouseEvent){
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-    const x = (e.clientX - rect.left) / rect.width - 0.5
-    const y = (e.clientY - rect.top) / rect.height - 0.5
-    setOffset({x, y})
-  }
-
   return (
     <div className={theme==='dark' ? 'min-h-screen bg-[#0a0a0d] text-white' : 'min-h-screen bg-[#f0e7d8] text-[#1a1a17]'}>
-      {/* Theme toggle + nav (sticky) */}
+      {/* Custom CSS for animations */}
+      <style jsx>{`
+        @keyframes glitch {
+          0% { transform: translate(0); }
+          20% { transform: translate(-2px, 2px); }
+          40% { transform: translate(-2px, -2px); }
+          60% { transform: translate(2px, 2px); }
+          80% { transform: translate(2px, -2px); }
+          100% { transform: translate(0); }
+        }
+        
+        @keyframes crackle {
+          0% { 
+            transform: scale(0) rotate(0deg);
+            opacity: 1;
+          }
+          50% {
+            transform: scale(1.2) rotate(180deg);
+            opacity: 0.8;
+          }
+          100% { 
+            transform: scale(2) rotate(360deg);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes wave {
+          0% { transform: translateX(-100%) scaleY(1); }
+          50% { transform: translateX(0%) scaleY(1.2); }
+          100% { transform: translateX(100%) scaleY(1); }
+        }
+        
+        .glitch-effect {
+          animation: glitch 0.15s ease-in-out;
+        }
+        
+        .crackle-particle {
+          animation: crackle 0.8s ease-out forwards;
+        }
+        
+        .wave-gradient {
+          animation: wave 8s ease-in-out infinite;
+        }
+        
+        .scroll-reveal {
+          transform: translateY(${scrollY * 0.5}px);
+          opacity: ${Math.max(0, 1 - scrollY / 600)};
+        }
+      `}</style>
+
+      {/* Header */}
       <header className={(theme==='dark'?'bg-white/5 text-white':'bg-[#1a1a17]/5 text-[#1a1a17]')+ ' sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-opacity-60 relative'}>
         <HeaderBackdrop theme={theme} />
         <div className="mx-auto max-w-6xl px-4 py-0.5 flex items-center justify-between relative z-10">
@@ -75,126 +131,88 @@ export default function LandingPage(){
         </div>
       </header>
 
-      {/* Hero with parallax */}
-      <section className="relative overflow-hidden" onMouseMove={onHeroMove}>
-        <ClubBackdrop theme={theme} offset={offset} />
-        <div className="relative mx-auto max-w-6xl px-4 py-12 md:py-16">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      {/* Enhanced Hero with all effects */}
+      <section 
+        className="relative overflow-hidden flex items-center"
+        style={{ height: '80vh' }}
+        onMouseMove={onHeroMove}
+        onClick={onHeroClick}
+        onTouchStart={onHeroClick}
+      >
+        {/* Enhanced backdrop with wavy gradients */}
+        <EnhancedClubBackdrop theme={theme} offset={offset} mousePos={mousePos} isGlitching={isGlitching} />
+        
+        {/* Crackle effects */}
+        {crackles.map(crackle => (
+          <div
+            key={crackle.id}
+            className="absolute pointer-events-none z-30"
+            style={{ left: crackle.x, top: crackle.y }}
+          >
+            <div className="crackle-particle">
+              <div className={`w-4 h-4 rounded-full ${theme === 'dark' ? 'bg-white' : 'bg-black'} opacity-80`} />
+              <div className={`absolute inset-0 w-8 h-8 -m-2 rounded-full border-2 ${theme === 'dark' ? 'border-white' : 'border-black'} opacity-40`} />
+              <div className={`absolute inset-0 w-12 h-12 -m-4 rounded-full border ${theme === 'dark' ? 'border-white' : 'border-black'} opacity-20`} />
+            </div>
+          </div>
+        ))}
+
+        <div className="scroll-reveal relative mx-auto max-w-6xl px-4 py-8 md:py-12 z-20">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
             <div className="max-w-2xl">
-              <h1 className="text-3xl md:text-5xl font-bold leading-tight tracking-tight bg-gradient-to-r from-purple-400 via-pink-500 to-teal-400 bg-clip-text text-transparent">
+              <h1 className="text-2xl md:text-4xl font-bold leading-tight tracking-tight bg-gradient-to-r from-purple-400 via-pink-500 to-teal-400 bg-clip-text text-transparent">
                 Stop wasting time. <span className="whitespace-nowrap">Find the perfect tracks.</span>
               </h1>
-              <p className={(theme==='dark'? 'text-white/70':'text-[#1a1a17]/70')+" mt-4 md:text-lg"}>
+              <p className={(theme==='dark'? 'text-white/70':'text-[#1a1a17]/70')+" mt-3 md:text-base"}>
                 AI-powered curation for aspiring and veteran DJs. Tell us your vibe, and we'll surface tracks that fit your style — fast.
               </p>
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <div className="mt-5 flex flex-col sm:flex-row gap-3">
                 <a href="#waitlist" className={(theme==='dark'?'bg-emerald-500 text-black':'bg-emerald-600 text-white')+" px-5 py-3 rounded-xl text-sm font-semibold transition-transform hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98]"}>Join the waiting list</a>
                 <a href="#demo" className={(theme==='dark'?'bg-white/10 text-white hover:bg-white/20':'bg-[#1a1a17]/5 text-[#1a1a17] hover:bg-[#1a1a17]/10')+" px-5 py-3 rounded-xl text-sm font-semibold transition hover:shadow"}>Watch demo</a>
               </div>
-              <ul className={(theme==='dark'? 'text-white/70':'text-[#1a1a17]/70')+" mt-6 text-sm grid gap-1.5"}>
+              <ul className={(theme==='dark'? 'text-white/70':'text-[#1a1a17]/70')+" mt-5 text-sm grid gap-1.5"}>
                 <li className="transition hover:translate-x-0.5">• Cut through thousands of tracks with AI that understands your play style.</li>
                 <li className="transition hover:translate-x-0.5">• Get recommendations that match your BPM, key, genre and vibe.</li>
                 <li className="transition hover:translate-x-0.5">• Auto-sync to Beatport DJ — exporting is just the fallback.</li>
               </ul>
             </div>
             
-            {/* Hero Image */}
+            {/* Enhanced Hero Image with more effects */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
                 <div 
-                  className="transform transition-transform duration-300 hover:scale-105"
+                  className="transform transition-all duration-300 hover:scale-105"
                   style={{
-                    transform: `translate(${offset.x * 10}px, ${offset.y * 10}px) scale(1)`
+                    transform: `translate(${offset.x * 15}px, ${offset.y * 15}px) scale(1)`
                   }}
                 >
                   <img 
                     src="/hero-headphones.png" 
                     alt="DJ Headphones with vibrant colors and music elements"
-                    className="w-[576px] h-[576px] md:w-[691px] md:h-[691px] object-contain drop-shadow-2xl"
+                    className="w-[460px] h-[460px] md:w-[553px] md:h-[553px] object-contain drop-shadow-2xl"
                   />
                 </div>
                 
-                {/* Floating elements around the image */}
+                {/* Enhanced floating elements with glitch effects */}
                 <div className="absolute inset-0 pointer-events-none">
-                  {/* Top area music notes */}
-                  <div 
-                    className={(theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600') + " absolute top-8 right-8 text-2xl animate-bounce"}
-                    style={{ animationDelay: '0s' }}
-                  >
-                    ♪
-                  </div>
-                  <div 
-                    className={(theme === 'dark' ? 'text-blue-400' : 'text-blue-600') + " absolute top-20 left-8 text-lg animate-bounce"}
-                    style={{ animationDelay: '1s' }}
-                  >
-                    ♪
-                  </div>
-                  <div 
-                    className={(theme === 'dark' ? 'text-purple-400' : 'text-purple-600') + " absolute top-4 left-1/2 text-xl animate-bounce"}
-                    style={{ animationDelay: '0.3s' }}
-                  >
-                    ♫
-                  </div>
-                  
-                  {/* Middle area music notes */}
-                  <div 
-                    className={(theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600') + " absolute top-1/2 -left-4 text-lg animate-bounce"}
-                    style={{ animationDelay: '0.8s' }}
-                  >
-                    ♪
-                  </div>
-                  <div 
-                    className={(theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600') + " absolute top-1/2 -right-6 text-2xl animate-bounce"}
-                    style={{ animationDelay: '1.2s' }}
-                  >
-                    ♫
-                  </div>
-                  
-                  {/* Bottom area music notes */}
-                  <div 
-                    className={(theme === 'dark' ? 'text-pink-400' : 'text-pink-600') + " absolute bottom-12 left-4 text-xl animate-bounce"}
-                    style={{ animationDelay: '0.5s' }}
-                  >
-                    ♫
-                  </div>
-                  <div 
-                    className={(theme === 'dark' ? 'text-rose-400' : 'text-rose-600') + " absolute bottom-8 right-12 text-lg animate-bounce"}
-                    style={{ animationDelay: '1.5s' }}
-                  >
-                    ♪
-                  </div>
-                  <div 
-                    className={(theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600') + " absolute bottom-16 left-1/2 text-xl animate-bounce"}
-                    style={{ animationDelay: '0.7s' }}
-                  >
-                    ♫
-                  </div>
-                  
-                  {/* Additional scattered notes */}
-                  <div 
-                    className={(theme === 'dark' ? 'text-teal-400' : 'text-teal-600') + " absolute top-32 right-4 text-sm animate-bounce"}
-                    style={{ animationDelay: '1.8s' }}
-                  >
-                    ♪
-                  </div>
-                  <div 
-                    className={(theme === 'dark' ? 'text-orange-400' : 'text-orange-600') + " absolute bottom-32 left-8 text-sm animate-bounce"}
-                    style={{ animationDelay: '2.1s' }}
-                  >
-                    ♫
-                  </div>
-                  <div 
-                    className={(theme === 'dark' ? 'text-lime-400' : 'text-lime-600') + " absolute top-40 left-12 text-base animate-bounce"}
-                    style={{ animationDelay: '1.3s' }}
-                  >
-                    ♪
-                  </div>
-                  <div 
-                    className={(theme === 'dark' ? 'text-fuchsia-400' : 'text-fuchsia-600') + " absolute bottom-40 right-8 text-base animate-bounce"}
-                    style={{ animationDelay: '1.7s' }}
-                  >
-                    ♫
-                  </div>
+                  {[
+                    { pos: 'top-8 right-8', size: 'text-2xl', color: theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600', delay: '0s', symbol: '♪' },
+                    { pos: 'top-20 left-8', size: 'text-lg', color: theme === 'dark' ? 'text-blue-400' : 'text-blue-600', delay: '1s', symbol: '♪' },
+                    { pos: 'top-4 left-1/2', size: 'text-xl', color: theme === 'dark' ? 'text-purple-400' : 'text-purple-600', delay: '0.3s', symbol: '♫' },
+                    { pos: 'top-1/2 -left-4', size: 'text-lg', color: theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600', delay: '0.8s', symbol: '♪' },
+                    { pos: 'top-1/2 -right-6', size: 'text-2xl', color: theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600', delay: '1.2s', symbol: '♫' },
+                    { pos: 'bottom-12 left-4', size: 'text-xl', color: theme === 'dark' ? 'text-pink-400' : 'text-pink-600', delay: '0.5s', symbol: '♫' },
+                    { pos: 'bottom-8 right-12', size: 'text-lg', color: theme === 'dark' ? 'text-rose-400' : 'text-rose-600', delay: '1.5s', symbol: '♪' },
+                    { pos: 'bottom-16 left-1/2', size: 'text-xl', color: theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600', delay: '0.7s', symbol: '♫' }
+                  ].map((note, i) => (
+                    <div 
+                      key={i}
+                      className={`${note.color} ${note.pos} ${note.size} absolute animate-bounce`}
+                      style={{ animationDelay: note.delay }}
+                    >
+                      {note.symbol}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -250,10 +268,10 @@ export default function LandingPage(){
           <h2 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-teal-400 bg-clip-text text-transparent">Everything you need to curate faster</h2>
           <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <FeatureCard theme={theme} title="AI Recommendations" text="Learns your style from likes, skips, collections and vibe prompts."/>
-            <FeatureCard theme={theme} title="Natural Language Search" text="Ask for 'peak-time melodic techno 126–128 BPM, 8A' and get spot-on results."/>
+            <FeatureCard theme={theme} title="Natural Language Search" text="Ask for &apos;peak-time melodic techno 126–128 BPM, 8A&apos; and get spot-on results."/>
             <FeatureCard theme={theme} title="Auto Sync to Beatport DJ" text="Primary workflow: one click, your collection becomes a Beatport DJ playlist."/>
             <FeatureCard theme={theme} title="Compact Discover Table" text="# · ▶ · Title · Artists · Genre · BPM · Key · Actions. Sticky top menus & filters."/>
-            <FeatureCard theme={theme} title="Offline & Queue" text="Work on the go. Changes sync when you're back online."/>
+            <FeatureCard theme={theme} title="Offline & Queue" text="Work on the go. Changes sync when you&apos;re back online."/>
             <FeatureCard theme={theme} title="Export Fallbacks" text="CSV, M3U, JSON when you need manual workflows."/>
           </div>
         </div>
@@ -347,11 +365,9 @@ function ThemeToggle({theme, setTheme}:{theme:'dark'|'light'; setTheme:(t:'dark'
 function HeaderBackdrop({theme}:{theme:'dark'|'light'}){
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {/* subtle grid */}
       <div className={(theme==='dark'
         ? 'bg-[linear-gradient(transparent_95%,rgba(255,255,255,0.08)_95%),linear-gradient(90deg,transparent_95%,rgba(255,255,255,0.08)_95%)]'
         : 'bg-[linear-gradient(transparent_95%,rgba(26,26,23,0.08)_95%),linear-gradient(90deg,transparent_95%,rgba(26,26,23,0.08)_95%)]')+" absolute inset-0 bg-[size:20px_20px] opacity-40"}></div>
-      {/* gentle color wash */}
       <div className={(theme==='dark'
         ? 'bg-[radial-gradient(circle_at_20%_10%,rgba(157,78,221,0.25),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(16,185,129,0.25),transparent_35%),radial-gradient(circle_at_60%_80%,rgba(56,189,248,0.2),transparent_35%)]'
         : 'bg-[radial-gradient(circle_at_20%_10%,rgba(255,196,124,0.45),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(255,137,137,0.42),transparent_35%),radial-gradient(circle_at_60%_80%,rgba(176,220,255,0.38),transparent_35%)]')+" absolute -inset-[20%] blur-3xl opacity-70"}></div>
@@ -434,5 +450,54 @@ function Quote({theme, who, text, image}:{theme:'dark'|'light'; who:string; text
         <figcaption className={(theme==='dark'?'text-white/70':'text-[#1a1a17]/70')+" text-xs font-medium"}>— {who}</figcaption>
       </div>
     </figure>
+  )
+}
+
+// Enhanced backdrop component with wavy gradients
+function EnhancedClubBackdrop({theme, offset, mousePos, isGlitching}: {
+  theme: 'dark'|'light'; 
+  offset: {x:number,y:number}; 
+  mousePos: {x:number,y:number};
+  isGlitching: boolean;
+}) {
+  const t1 = { 
+    transform: `translate3d(${offset.x*40}px, ${offset.y*40}px, 0) scale(1)` 
+  }
+  const t2 = { 
+    transform: `translate3d(${offset.x*-25}px, ${offset.y*-25}px, 0)` 
+  }
+  
+  return (
+    <div aria-hidden className="absolute inset-0 overflow-hidden">
+      {/* Animated wavy gradient layers */}
+      <div 
+        style={t1} 
+        className={`absolute -inset-[30%] blur-3xl transition-all duration-150 opacity-70 ${
+          theme==='dark'
+            ? 'bg-[radial-gradient(circle_at_20%_10%,rgba(157,78,221,0.4),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(16,185,129,0.4),transparent_35%),radial-gradient(circle_at_60%_80%,rgba(56,189,248,0.3),transparent_35%)]'
+            : 'bg-[radial-gradient(circle_at_20%_10%,rgba(255,196,124,0.6),transparent_35%),radial-gradient(circle_at_80%_20%,rgba(255,137,137,0.55),transparent_35%),radial-gradient(circle_at_60%_80%,rgba(176,220,255,0.5),transparent_35%)]'
+        }`}
+      />
+      
+      {/* Interactive wave layer that follows mouse */}
+      <div 
+        className="absolute inset-0 wave-gradient opacity-30"
+        style={{
+          background: `radial-gradient(circle at ${mousePos.x}px ${mousePos.y}px, ${
+            theme === 'dark' 
+              ? 'rgba(255,255,255,0.1) 0%, transparent 50%'
+              : 'rgba(0,0,0,0.1) 0%, transparent 50%'
+          })`,
+          transform: 'scale(1)',
+          transition: 'transform 0.15s ease-out'
+        }}
+      />
+      
+      {/* Grid with parallax */}
+      <div style={t2} className={`${theme==='dark'
+        ? 'bg-[linear-gradient(transparent_95%,rgba(255,255,255,0.08)_95%),linear-gradient(90deg,transparent_95%,rgba(255,255,255,0.08)_95%)]'
+        : 'bg-[linear-gradient(transparent_95%,rgba(26,26,23,0.07)_95%),linear-gradient(90deg,transparent_95%,rgba(26,26,23,0.07)_95%)]'
+      } absolute inset-0 bg-[size:20px_20px] transition-opacity duration-150 opacity-40`} />
+    </div>
   )
 }

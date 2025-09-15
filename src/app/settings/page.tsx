@@ -156,7 +156,7 @@ export default function SettingsPage() {
           
           <div className="prose prose-sm text-gray-600">
             <p>
-              Beatport Curator operates in full compliance with Beatport's Terms of Service:
+              Beatport Curator operates in full compliance with Beatport&apos;s Terms of Service:
             </p>
             <ul className="list-disc list-inside space-y-1 mt-2">
               <li>No scraping or automated browsing of Beatport pages</li>

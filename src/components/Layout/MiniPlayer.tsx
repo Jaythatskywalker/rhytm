@@ -13,8 +13,8 @@ export function MiniPlayer() {
     currentTime,
     duration,
     volume,
-    play,
-    pause,
+    // play, // Unused
+    // pause, // Unused
     stop,
     togglePlayPause,
     setCurrentTime,

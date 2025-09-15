@@ -59,13 +59,13 @@ export function TracksTable({ tracks, loading, theme = 'dark' }: TracksTableProp
     setSelectedTrack(null);
   };
 
-  const formatDuration = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
+  // const formatDuration = (seconds: number) => { // Unused
+  //   const mins = Math.floor(seconds / 60);
+  //   const secs = Math.floor(seconds % 60);
+  //   return `${mins}:${secs.toString().padStart(2, '0')}`;
+  // };
 
-  const SortableHeader = ({ field, children }: { field: any, children: React.ReactNode }) => (
+  const SortableHeader = ({ field, children }: { field: keyof Track, children: React.ReactNode }) => (
     <th 
       className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer select-none transition ${
         theme === 'dark' 

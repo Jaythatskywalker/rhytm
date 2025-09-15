@@ -168,7 +168,7 @@ export default function ExportPage() {
                     name="format"
                     value={format}
                     checked={selectedFormat === format}
-                    onChange={(e) => setSelectedFormat(e.target.value as any)}
+                    onChange={(e) => setSelectedFormat(e.target.value as 'csv' | 'm3u' | 'json')}
                     className="sr-only"
                   />
                   <div className="flex items-center">

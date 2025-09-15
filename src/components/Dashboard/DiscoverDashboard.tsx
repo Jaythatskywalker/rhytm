@@ -3,11 +3,11 @@
 import React, { useMemo, useState } from 'react';
 import { FilterBar } from '@/components/Discover/FilterBar';
 import { TracksTable } from '@/components/Discover/TracksTable';
-import { DashboardNav } from '@/components/Layout/DashboardNav';
+// import { DashboardNav } from '@/components/Layout/DashboardNav'; // Unused
 import { useFiltersStore } from '@/lib/stores/useFiltersStore';
 import { sampleTracks, filterTracks, sortTracks, BeatportURLService, processAIQueryWithBeatport } from '@/lib/sampleData';
 import { useClientInit } from '@/hooks/useClientInit';
-import { Play, Copy, Check, AlertCircle, Music, Clock, Key, BarChart3, TrendingUp, Zap, Music2, Target, ArrowRight } from 'lucide-react';
+import { Music, Clock, Key, BarChart3, Zap, Music2, ArrowRight } from 'lucide-react';
 import { Track } from '@/types';
 
 
@@ -329,7 +329,7 @@ function TrackAnalytics({ tracks, theme }: TrackAnalyticsProps) {
   const bpmAnalysis = BeatportURLService.analyzeBPMCompatibility(tracks);
 
   // Camelot Wheel positions for visualization
-  const camelotPositions = {
+  // const camelotPositions = { // Unused
     '1A': { x: 50, y: 5, color: '#ef4444' },   '1B': { x: 65, y: 10, color: '#f97316' },
     '2A': { x: 75, y: 20, color: '#f59e0b' },  '2B': { x: 80, y: 35, color: '#eab308' },
     '3A': { x: 80, y: 50, color: '#84cc16' },  '3B': { x: 75, y: 65, color: '#22c55e' },
@@ -346,7 +346,7 @@ function TrackAnalytics({ tracks, theme }: TrackAnalyticsProps) {
 
   // Get unique keys from tracks
   const trackKeys = tracks.map(t => t.key);
-  const uniqueKeys = [...new Set(trackKeys)];
+  // const uniqueKeys = [...new Set(trackKeys)]; // Unused
 
   // BPM distribution
   const bpms = tracks.map(t => t.bpm).sort((a, b) => a - b);
@@ -384,7 +384,7 @@ function TrackAnalytics({ tracks, theme }: TrackAnalyticsProps) {
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as 'discover' | 'test')}
             className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
               activeTab === tab.id
                 ? theme === 'dark'
