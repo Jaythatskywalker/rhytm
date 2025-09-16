@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'standalone', // Optional: for Docker/self-hosting
+  // output: 'standalone', // Commented out for Vercel deployment
   images: {
     domains: ['www.soundhelix.com'], // For your sample audio previews
   },
