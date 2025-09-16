@@ -5,12 +5,20 @@ import { Track, Collection, ExportFormat } from '@/types';
 const mockCollections: Collection[] = [];
 const mockTracks: Track[] = [];
 
+type RouteParams = {
+  params: Promise<{
+    id: string;
+    format: string;
+  }>;
+};
+
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ id: string; format: string }> }
+  { params }: RouteParams
 ) {
   try {
-    const { id, format } = await context.params;
+    const resolvedParams = await params;
+    const { id, format } = resolvedParams;
     
     // Validate format
     if (!['csv', 'm3u', 'json'].includes(format)) {

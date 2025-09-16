@@ -560,7 +560,7 @@ export default function LandingPage(){
                 </div>
                 <h3 className="text-xl font-bold text-emerald-400 mb-2">Welcome to the Beta!</h3>
                 <p className={(theme==='dark'?'text-white/80':'text-[#1a1a17]/80')}>
-                  You're now on the list! We'll send you exclusive updates and your early access invitation soon.
+                  You&apos;re now on the list! We&apos;ll send you exclusive updates and your early access invitation soon.
                 </p>
               </div>
             )}
