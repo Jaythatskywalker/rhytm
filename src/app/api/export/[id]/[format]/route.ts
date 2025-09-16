@@ -5,17 +5,17 @@ import { Track, Collection } from '@/types';
 const mockCollections: Collection[] = [];
 const mockTracks: Track[] = [];
 
-interface ExportParams {
-  id: string;
-  format: 'csv' | 'm3u' | 'json';
-}
-
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<ExportParams> }
+  { params }: { params: Promise<{ id: string; format: string }> }
 ) {
   try {
     const { id, format } = await params;
+    
+    // Validate format
+    if (!['csv', 'm3u', 'json'].includes(format)) {
+      return NextResponse.json({ error: 'Invalid format' }, { status: 400 });
+    }
     
     // Find the collection
     const collection = mockCollections.find(c => c.id === id);
