@@ -78,7 +78,7 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
     }
   },
 
-  removeTrackFromLibrary: (trackId) => {
+  removeTrackFromLibrary: async (trackId) => {
     set(state => ({
       tracks: state.tracks.filter(t => t.id !== trackId),
       // Also remove from all collections
@@ -86,7 +86,7 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
     }));
   },
 
-  toggleTrackLike: (trackId) => {
+  toggleTrackLike: async (trackId) => {
     set(state => ({
       tracks: state.tracks.map(track => 
         track.id === trackId 
@@ -97,7 +97,7 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
   },
 
   // Collection actions
-  createCollection: (name, tags = []) => {
+  createCollection: async (name, tags = []) => {
     const collection: Collection = {
       id: crypto.randomUUID(),
       userId: 'current-user', // TODO: Get from auth
@@ -113,7 +113,7 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
     return collection;
   },
 
-  updateCollection: (id, updates) => {
+  updateCollection: async (id, updates) => {
     set(state => ({
       collections: state.collections.map(collection =>
         collection.id === id
@@ -123,14 +123,14 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
     }));
   },
 
-  deleteCollection: (id) => {
+  deleteCollection: async (id) => {
     set(state => ({
       collections: state.collections.filter(c => c.id !== id),
       collectionTracks: state.collectionTracks.filter(ct => ct.collectionId !== id)
     }));
   },
 
-  addTrackToCollection: (collectionId, trackId) => {
+  addTrackToCollection: async (collectionId, trackId) => {
     set(state => {
       const exists = state.collectionTracks.find(
         ct => ct.collectionId === collectionId && ct.trackId === trackId
@@ -162,7 +162,7 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
     });
   },
 
-  removeTrackFromCollection: (collectionId, trackId) => {
+  removeTrackFromCollection: async (collectionId, trackId) => {
     set(state => ({
       collectionTracks: state.collectionTracks.filter(
         ct => !(ct.collectionId === collectionId && ct.trackId === trackId)
@@ -175,7 +175,7 @@ export const useLibraryStore = create<LibraryStore>((set, get) => ({
     }));
   },
 
-  reorderCollectionTracks: (collectionId, trackIds) => {
+  reorderCollectionTracks: async (collectionId, trackIds) => {
     set(state => ({
       collectionTracks: state.collectionTracks.map(ct => {
         if (ct.collectionId !== collectionId) return ct;

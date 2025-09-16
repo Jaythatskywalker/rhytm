@@ -21,6 +21,10 @@ interface SyncQueueItem {
 class IndexedDBManager {
   private db: IDBDatabase | null = null;
 
+  isInitialized(): boolean {
+    return this.db !== null;
+  }
+
   async init(): Promise<void> {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(DB_NAME, DB_VERSION);
@@ -283,7 +287,7 @@ export const dbManager = new IndexedDBManager();
 
 // Initialize only when needed and in browser
 export const initializeIndexedDB = async () => {
-  if (typeof window !== 'undefined' && !dbManager.db) {
+  if (typeof window !== 'undefined' && !dbManager.isInitialized()) {
     try {
       await dbManager.init();
     } catch (error) {

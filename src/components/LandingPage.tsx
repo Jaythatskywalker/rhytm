@@ -1,4 +1,64 @@
 import React from 'react'
+import Image from 'next/image'
+
+// VerticalStepCard component for the How it Works section
+function VerticalStepCard({theme,n,title,text,icon}:{theme:'dark'|'light'; n:number; title:string; text:string; icon:string}){
+  const getIcon = (iconType: string) => {
+    switch (iconType) {
+      case 'link':
+        return (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+        )
+      case 'music':
+        return (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 18V5l12-2v13"/>
+            <circle cx="6" cy="18" r="3"/>
+            <circle cx="18" cy="16" r="3"/>
+          </svg>
+        )
+      case 'sparkles':
+        return (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+            <path d="M20 3v4"/>
+            <path d="M22 5h-4"/>
+            <path d="M4 17v2"/>
+            <path d="M5 18H3"/>
+          </svg>
+        )
+      default:
+        return null
+    }
+  }
+
+  return (
+    <div className="flex items-start gap-6 group">
+      {/* Step Number & Icon */}
+      <div className="flex-shrink-0">
+        <div className="relative">
+          <div className={(theme==='dark'?'bg-gradient-to-r from-emerald-500 to-teal-500':'bg-gradient-to-r from-emerald-600 to-teal-600')+" w-16 h-16 rounded-2xl flex items-center justify-center text-black font-bold text-xl shadow-lg"}>
+            {n}
+          </div>
+          <div className="absolute -top-2 -right-2 w-8 h-8 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20">
+            <div className="text-emerald-400">
+              {getIcon(icon)}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Content */}
+      <div className="flex-1 pt-2">
+        <h3 className="text-xl font-bold mb-2">{title}</h3>
+        <p className={(theme==='dark'?'text-white/70':'text-[#1a1a17]/70')+" text-sm leading-relaxed"}>{text}</p>
+      </div>
+    </div>
+  )
+}
 
 // Landing page with enhanced interactive hero section
 export default function LandingPage(){
@@ -113,9 +173,11 @@ export default function LandingPage(){
         <HeaderBackdrop theme={theme} />
         <div className="mx-auto max-w-6xl px-4 py-0.5 flex items-center justify-between relative z-10">
           <div className="flex items-center gap-2">
-            <img 
+            <Image 
               src={theme === 'dark' ? '/rhytm-logo-dark.png' : '/rhytm-logo-light.png'}
               alt="RHYTM Logo"
+              width={200}
+              height={112}
               className="h-28 w-auto"
             />
           </div>
@@ -186,9 +248,11 @@ export default function LandingPage(){
                     transform: `translate(${offset.x * 15}px, ${offset.y * 15}px) scale(1)`
                   }}
                 >
-                  <img 
+                  <Image 
                     src="/hero-headphones.png" 
                     alt="DJ Headphones with vibrant colors and music elements"
+                    width={553}
+                    height={553}
                     className="w-[460px] h-[460px] md:w-[553px] md:h-[553px] object-contain drop-shadow-2xl"
                   />
                 </div>
@@ -254,10 +318,84 @@ export default function LandingPage(){
       {/* How it works */}
       <section id="how" className={(theme==='dark'?'bg-white/5':'bg-[#1a1a17]/5')+" border-y border-white/10 md:border-[#1a1a17]/10 relative overflow-hidden"}>
         <SectionBackdrop theme={theme} />
-        <div className="relative mx-auto max-w-6xl px-4 py-14 grid md:grid-cols-3 gap-8">
-          <StepCard theme={theme} n={1} title="Connect" text="Secure OAuth to Beatport. Sync your library & playlists."/>
-          <StepCard theme={theme} n={2} title="Tell your vibe" text="Genres, BPM range, keys, artists you like — or just type it in natural language."/>
-          <StepCard theme={theme} n={3} title="Get the good stuff" text="Curated tracks matched to your style. Add to Collections and auto-sync to Beatport DJ."/>
+        <div className="relative mx-auto max-w-4xl px-4 py-16">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center mb-4">
+              <div className="relative">
+                {/* Vector-style icon with brand colors */}
+                <svg 
+                  width="48" 
+                  height="48" 
+                  viewBox="0 0 48 48" 
+                  className="drop-shadow-lg"
+                >
+                  <defs>
+                    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#9D4EDD" />
+                      <stop offset="50%" stopColor="#10B981" />
+                      <stop offset="100%" stopColor="#38BDF8" />
+                    </linearGradient>
+                  </defs>
+                  {/* DJ Turntable Icon */}
+                  <circle cx="24" cy="24" r="20" fill="url(#iconGradient)" opacity="0.2"/>
+                  <circle cx="24" cy="24" r="16" fill="none" stroke="url(#iconGradient)" strokeWidth="2"/>
+                  <circle cx="24" cy="24" r="8" fill="url(#iconGradient)" opacity="0.8"/>
+                  <circle cx="24" cy="24" r="3" fill="white"/>
+                  {/* Sound waves */}
+                  <path d="M8 24 Q12 20, 16 24 Q20 28, 24 24" stroke="url(#iconGradient)" strokeWidth="2" fill="none" opacity="0.6"/>
+                  <path d="M24 24 Q28 20, 32 24 Q36 28, 40 24" stroke="url(#iconGradient)" strokeWidth="2" fill="none" opacity="0.6"/>
+                </svg>
+              </div>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-teal-400 bg-clip-text text-transparent mb-4">
+              How it Works
+            </h2>
+            <p className={(theme==='dark'?'text-white/70':'text-[#1a1a17]/70')+" text-lg max-w-2xl mx-auto"}>
+              Get started in three simple steps and transform your music discovery process
+            </p>
+          </div>
+
+          {/* Vertical Steps */}
+          <div className="space-y-8">
+            <VerticalStepCard 
+              theme={theme} 
+              n={1} 
+              title="Connect" 
+              text="Secure OAuth to Beatport. Sync your library & playlists."
+              icon="link"
+            />
+            <VerticalStepCard 
+              theme={theme} 
+              n={2} 
+              title="Tell your vibe" 
+              text="Genres, BPM range, keys, artists you like — or just type it in natural language."
+              icon="music"
+            />
+            <VerticalStepCard 
+              theme={theme} 
+              n={3} 
+              title="Get the good stuff" 
+              text="Curated tracks matched to your style. Add to Collections and auto-sync to Beatport DJ."
+              icon="sparkles"
+            />
+          </div>
+
+          {/* Clear CTA */}
+          <div className="text-center mt-12">
+            <a 
+              href="#waitlist" 
+              className={(theme==='dark'?'bg-gradient-to-r from-emerald-500 to-teal-500 text-black':'bg-gradient-to-r from-emerald-600 to-teal-600 text-white')+" inline-flex items-center gap-2 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] shadow-lg"}
+            >
+              <span>Start Your Journey</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+            <p className={(theme==='dark'?'text-white/60':'text-[#1a1a17]/60')+" mt-3 text-sm"}>
+              Join thousands of DJs already using RHYTM
+            </p>
+          </div>
         </div>
       </section>
 
@@ -312,25 +450,142 @@ export default function LandingPage(){
         </div>
       </section>
 
-      {/* Waiting List */}
-      <section id="waitlist" className="relative overflow-hidden">
+      {/* Enhanced Waiting List */}
+      <section id="waitlist" className="relative overflow-hidden min-h-[80vh] flex items-center">
         <SectionBackdrop theme={theme} subtle />
-        <div className="relative mx-auto max-w-3xl px-4 py-16 text-center">
-          <h2 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-purple-400 via-pink-500 to-teal-400 bg-clip-text text-transparent">Join the waiting list</h2>
-          <p className={(theme==='dark'? 'text-white/70':'text-[#1a1a17]/70')+" mt-2"}>Limited beta. Be the first to get access.</p>
-          <form onSubmit={submit} className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-            <input
-              type="email"
-              value={email}
-              onChange={e=>setEmail(e.target.value)}
-              placeholder="you@club.email"
-              className={(theme==='dark'?'bg-white/10 placeholder-white/50 text-white border-white/20':'bg-[#1a1a17]/5 placeholder-[#1a1a17]/50 text-[#1a1a17] border-[#1a1a17]/10')+" w-full sm:w-96 px-4 py-3 rounded-xl border outline-none focus:ring-2 focus:ring-emerald-500 transition"}
-              required
-            />
-            <button type="submit" className={(theme==='dark'?'bg-emerald-500 text-black':'bg-emerald-600 text-white')+" px-5 py-3 rounded-xl text-sm font-semibold transition-transform hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98]"}>Notify me</button>
-          </form>
-          {error && <p className="mt-2 text-sm text-rose-400">{error}</p>}
-          {submitted && <div className={(theme==='dark'?'bg-emerald-500/15 text-emerald-200 border-emerald-400/30':'bg-emerald-600/10 text-emerald-800 border-emerald-600/30')+" mt-4 inline-flex items-center gap-2 px-3 py-2 rounded-lg border text-sm"}>✅ Thanks! We&apos;ll be in touch soon.</div>}
+        <div className="relative mx-auto max-w-5xl px-4 py-20">
+          <div className="text-center mb-12">
+            {/* Beta Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 mb-6">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+              <span className="text-sm font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                LIMITED BETA ACCESS
+              </span>
+            </div>
+
+            <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-teal-400 bg-clip-text text-transparent mb-6">
+              Be the First to Experience
+              <br />
+              <span className="text-3xl md:text-5xl">The Future of DJ Curation</span>
+            </h2>
+            
+            <p className={(theme==='dark'? 'text-white/80':'text-[#1a1a17]/80')+" text-xl max-w-3xl mx-auto mb-8"}>
+              Join the exclusive beta and get <strong className="text-emerald-400">50% off</strong> when we launch. 
+              Only <span className="font-bold text-pink-400">500 spots</span> available for early access.
+            </p>
+
+            {/* Benefits Grid */}
+            <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+              <div className={(theme==='dark'?'bg-white/5 border-white/10':'bg-[#1a1a17]/5 border-[#1a1a17]/10')+" rounded-2xl p-6 border text-center"}>
+                <div className="flex justify-center mb-4">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={(theme==='dark'?'text-emerald-400':'text-emerald-600')}>
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M8 12l2 2 4-4"/>
+                  </svg>
+                </div>
+                <h3 className="font-semibold mb-2">Early Access</h3>
+                <p className={(theme==='dark'?'text-white/70':'text-[#1a1a17]/70')+" text-sm"}>Be among the first 500 to try RHYTM before public launch</p>
+              </div>
+              <div className={(theme==='dark'?'bg-white/5 border-white/10':'bg-[#1a1a17]/5 border-[#1a1a17]/10')+" rounded-2xl p-6 border text-center"}>
+                <div className="flex justify-center mb-4">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={(theme==='dark'?'text-emerald-400':'text-emerald-600')}>
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                </div>
+                <h3 className="font-semibold mb-2">50% Discount</h3>
+                <p className={(theme==='dark'?'text-white/70':'text-[#1a1a17]/70')+" text-sm"}>Lifetime discount on your subscription when we launch</p>
+              </div>
+              <div className={(theme==='dark'?'bg-white/5 border-white/10':'bg-[#1a1a17]/5 border-[#1a1a17]/10')+" rounded-2xl p-6 border text-center"}>
+                <div className="flex justify-center mb-4">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={(theme==='dark'?'text-emerald-400':'text-emerald-600')}>
+                    <path d="M9 12l2 2 4-4"/>
+                    <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                    <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                    <path d="M12 3c0 1-1 3-3 3s-3-2-3-3 1-3 3-3 3 2 3 3"/>
+                    <path d="M12 21c0-1 1-3 3-3s3 2 3 3-1 3-3 3-3-2-3-3"/>
+                  </svg>
+                </div>
+                <h3 className="font-semibold mb-2">Shape the Product</h3>
+                <p className={(theme==='dark'?'text-white/70':'text-[#1a1a17]/70')+" text-sm"}>Your feedback directly influences our development roadmap</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Enhanced Form */}
+          <div className="max-w-2xl mx-auto">
+            <form onSubmit={submit} className="space-y-6">
+              <div className="relative">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e=>setEmail(e.target.value)}
+                  placeholder="Enter your email to secure your spot"
+                  className={(theme==='dark'?'bg-white/10 placeholder-white/50 text-white border-white/20':'bg-[#1a1a17]/5 placeholder-[#1a1a17]/50 text-[#1a1a17] border-[#1a1a17]/10')+" w-full px-6 py-4 rounded-2xl border-2 outline-none focus:ring-4 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all text-lg"}
+                  required
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+                  <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              </div>
+              
+              <button 
+                type="submit" 
+                className={(theme==='dark'?'bg-gradient-to-r from-emerald-500 to-teal-500 text-black':'bg-gradient-to-r from-emerald-600 to-teal-600 text-white')+" w-full px-8 py-4 rounded-2xl text-lg font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] shadow-lg"}
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <span>Secure My Beta Spot</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </span>
+              </button>
+            </form>
+
+            {/* Status Messages */}
+            {error && (
+              <div className="mt-4 p-4 rounded-xl bg-rose-500/10 border border-rose-400/30 text-rose-400 text-center">
+                {error}
+              </div>
+            )}
+            
+            {submitted && (
+              <div className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-emerald-500/15 to-teal-500/15 border border-emerald-400/30 text-center">
+                <div className="flex justify-center mb-4">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-emerald-400">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <path d="M22 4L12 14.01l-3-3"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-emerald-400 mb-2">Welcome to the Beta!</h3>
+                <p className={(theme==='dark'?'text-white/80':'text-[#1a1a17]/80')}>
+                  You're now on the list! We'll send you exclusive updates and your early access invitation soon.
+                </p>
+              </div>
+            )}
+
+            {/* Trust Indicators */}
+            <div className="mt-8 text-center">
+              <p className={(theme==='dark'?'text-white/60':'text-[#1a1a17]/60')+" text-sm mb-4 flex items-center justify-center gap-2"}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-emerald-400">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Your email is safe with us. No spam, ever.
+              </p>
+              <div className="flex items-center justify-center gap-6 text-sm opacity-70">
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
+                  <span>2,847 DJs already joined</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 bg-pink-400 rounded-full"></span>
+                  <span>Only 500 spots left</span>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -424,6 +679,7 @@ function StepCard({theme,n,title,text}:{theme:'dark'|'light'; n:number; title:st
   )
 }
 
+
 function FeatureCard({theme,title,text}:{theme:'dark'|'light'; title:string; text:string}){
   return (
     <div className={(theme==='dark'?'bg-white/5 border-white/10':'bg-[#1a1a17]/5 border-[#1a1a17]/10')+" rounded-2xl p-4 border transition hover:-translate-y-0.5 hover:shadow-md"}>
@@ -439,9 +695,11 @@ function Quote({theme, who, text, image}:{theme:'dark'|'light'; who:string; text
       <div className="flex flex-col items-center text-center">
         <div className="group mb-6">
           <div className={`w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-2 transition-all duration-300 group-hover:scale-105 ${theme === 'dark' ? 'border-white/20' : 'border-[#1a1a17]/20'}`}>
-            <img 
+            <Image 
               src={image} 
               alt={`${who} Portrait`}
+              width={160}
+              height={160}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
             />
           </div>

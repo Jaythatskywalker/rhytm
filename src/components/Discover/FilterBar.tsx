@@ -8,7 +8,7 @@ import { BeatportURLService, processAIQueryWithBeatport } from '@/lib/sampleData
 
 interface AIResponse {
   text: string;
-  appliedFilters?: Record<string, string | number | undefined>;
+  appliedFilters?: Record<string, string | number | boolean | undefined>;
   suggestions?: string[];
 }
 
@@ -60,7 +60,7 @@ export function FilterBar({ theme = 'dark' }: { theme?: 'dark' | 'light' }) {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     const lowerQuery = query.toLowerCase();
-    const appliedFilters: Record<string, string | number | undefined> = {};
+    const appliedFilters: Record<string, string | number | boolean | undefined> = {};
     let responseText = '';
     let suggestions: string[] = [];
 

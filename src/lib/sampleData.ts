@@ -130,13 +130,13 @@ export const sampleTracks: Track[] = [
 ];
 
 // Filter and sort functions
-export function filterTracks(tracks: Track[], filters: Record<string, string | number | undefined>): Track[] {
+export function filterTracks(tracks: Track[], filters: Record<string, string | number | boolean | undefined>): Track[] {
   return tracks.filter(track => {
     if (filters.genre && track.genre !== filters.genre) return false;
     if (filters.key && track.key !== filters.key) return false;
-    if (filters.bpmMin && track.bpm < filters.bpmMin) return false;
-    if (filters.bpmMax && track.bpm > filters.bpmMax) return false;
-    if (filters.query) {
+    if (filters.bpmMin && typeof filters.bpmMin === 'number' && track.bpm < filters.bpmMin) return false;
+    if (filters.bpmMax && typeof filters.bpmMax === 'number' && track.bpm > filters.bpmMax) return false;
+    if (filters.query && typeof filters.query === 'string') {
       const query = filters.query.toLowerCase();
       const searchText = `${track.title} ${track.artists.join(' ')} ${track.label || ''}`.toLowerCase();
       if (!searchText.includes(query)) return false;

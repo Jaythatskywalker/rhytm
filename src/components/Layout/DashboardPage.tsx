@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { clsx } from 'clsx';
 import { DashboardLayout } from './DashboardLayout';
@@ -121,9 +122,11 @@ export function DashboardPage({ children, theme = 'dark', onThemeChange }: Dashb
                   localStorage.setItem('rhytm-view-mode', 'landing');
                   window.location.href = '/';
                 }}>
-                  <img 
+                  <Image 
                     src={currentTheme === 'dark' ? '/rhytm-logo-dark.png' : '/rhytm-logo-light.png'}
                     alt="RHYTM Logo"
+                    width={200}
+                    height={112}
                     className="h-28 w-auto hover:opacity-80 transition-opacity cursor-pointer"
                   />
                 </Link>
@@ -182,9 +185,11 @@ export function DashboardPage({ children, theme = 'dark', onThemeChange }: Dashb
                     window.location.href = '/';
                     closeMobileMenu();
                   }}>
-                    <img 
+                    <Image 
                       src={currentTheme === 'dark' ? '/rhytm-logo-dark.png' : '/rhytm-logo-light.png'}
                       alt="RHYTM Logo"
+                      width={200}
+                      height={112}
                       className="h-16 w-auto hover:opacity-80 transition-opacity cursor-pointer"
                     />
                   </Link>

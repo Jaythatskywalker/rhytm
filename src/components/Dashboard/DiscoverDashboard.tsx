@@ -384,7 +384,7 @@ function TrackAnalytics({ tracks, theme }: TrackAnalyticsProps) {
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as 'discover' | 'test')}
+            onClick={() => setActiveTab(tab.id as 'keys' | 'bpm' | 'energy')}
             className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
               activeTab === tab.id
                 ? theme === 'dark'

@@ -65,7 +65,7 @@ export function TracksTable({ tracks, loading, theme = 'dark' }: TracksTableProp
   //   return `${mins}:${secs.toString().padStart(2, '0')}`;
   // };
 
-  const SortableHeader = ({ field, children }: { field: keyof Track, children: React.ReactNode }) => (
+  const SortableHeader = ({ field, children }: { field: 'title' | 'artists' | 'genre' | 'bpm' | 'key' | 'releaseDate', children: React.ReactNode }) => (
     <th 
       className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer select-none transition ${
         theme === 'dark' 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Track, Collection } from '@/types';
+import { Track, Collection, ExportFormat } from '@/types';
 
 // Mock data - in a real app, this would come from your database
 const mockCollections: Collection[] = [];
@@ -7,15 +7,18 @@ const mockTracks: Track[] = [];
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string; format: string }> }
+  context: { params: Promise<{ id: string; format: string }> }
 ) {
   try {
-    const { id, format } = await params;
+    const { id, format } = await context.params;
     
     // Validate format
     if (!['csv', 'm3u', 'json'].includes(format)) {
       return NextResponse.json({ error: 'Invalid format' }, { status: 400 });
     }
+    
+    // Type assertion for format
+    const validFormat = format as ExportFormat;
     
     // Find the collection
     const collection = mockCollections.find(c => c.id === id);
@@ -24,7 +27,7 @@ export async function GET(
     }
     
     // Get tracks for this collection (mock implementation)
-    const tracks = mockTracks.filter(track => 
+    const tracks = mockTracks.filter(_track => 
       // In real implementation, you'd query collection_tracks table
       true // placeholder
     );
@@ -33,7 +36,7 @@ export async function GET(
     let contentType: string;
     let filename: string;
     
-    switch (format) {
+    switch (validFormat) {
       case 'csv':
         content = generateCSV(tracks, collection);
         contentType = 'text/csv';
@@ -74,7 +77,7 @@ export async function GET(
   }
 }
 
-function generateCSV(tracks: Track[], collection: Collection): string {
+function generateCSV(tracks: Track[], _collection: Collection): string {
   const headers = [
     'Title',
     'Artists', 
